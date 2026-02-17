@@ -1,0 +1,397 @@
+{
+  "info": {
+    "name": "SPARK-PENS API",
+    "description": "Room Booking System API for PENS (Politeknik Elektronika Negeri Surabaya)\n\n## Base URL\n- Production: `https://spark-pens-api.onrender.com`\n- Local: `http://localhost:5000`\n\n## Default Admin Credentials\n- Username: `admin`\n- Password: `admin`\n\n## Authentication\nMost endpoints require JWT Bearer token authentication. To get the token:\n1. Login using `/api/auth/login` endpoint\n2. Copy the `token` from the response\n3. Set it as the `token` environment variable in Postman\n\n## Environment Variables\nCreate a Postman environment with these variables:\n| Variable | Initial Value |\n|----------|---------------|\n| `baseUrl` | https://spark-pens-api.onrender.com |\n| `token` | (empty - will be set after login) |",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://spark-pens-api.onrender.com",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (Admin)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login (Google)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/google",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "google"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"credential\": \"YOUR_GOOGLE_ID_TOKEN\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "forgot-password"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@sparkpens.com\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "reset-password"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"RESET_TOKEN_HERE\",\n  \"newPassword\": \"newPassword123\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Set Password (Google User)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/set-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "set-password"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"newPassword\": \"securePassword123\"\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "Get All Rooms",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Room (Admin)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ruang Meeting Baru\",\n  \"building\": \"Gedung Baru\",\n  \"floor\": 2,\n  \"capacity\": 15,\n  \"description\": \"Ruang meeting baru dengan fasilitas lengkap\",\n  \"isAvailable\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Room (Admin)",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/ROOM_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "ROOM_ID_HERE"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"ROOM_ID_HERE\",\n  \"name\": \"Ruang Meeting Updated\",\n  \"building\": \"Gedung A\",\n  \"floor\": 1,\n  \"capacity\": 12,\n  \"description\": \"Ruang meeting yang sudah diupdate\",\n  \"isAvailable\": true,\n  \"isDeleted\": false,\n  \"createdDate\": \"2026-02-14T00:00:00Z\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Room (Admin)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/rooms/ROOM_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rooms", "ROOM_ID_HERE"]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Get All Bookings (Admin)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings"]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bookings By Room",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/room/ROOM_ID_HERE?date=2026-02-20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings", "room", "ROOM_ID_HERE"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-02-20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Booking (Public)",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": \"ROOM_ID_HERE\",\n  \"requesterName\": \"John Doe\",\n  \"requesterEmail\": \"john@example.com\",\n  \"requesterPhone\": \"081234567890\",\n  \"bookingStartDate\": \"2026-02-25T09:00:00Z\",\n  \"bookingEndDate\": \"2026-02-25T11:00:00Z\",\n  \"purpose\": \"Rapat Team Building\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Booking Status (Admin)",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/BOOKING_ID_HERE/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings", "BOOKING_ID_HERE", "status"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Approved\",\n  \"rejectionReason\": null\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Booking (Admin)",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/BOOKING_ID_HERE/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings", "BOOKING_ID_HERE", "status"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Rejected\",\n  \"rejectionReason\": \"Ruangan sedang dalam pemeliharaan\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Booking (Admin)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/BOOKING_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings", "BOOKING_ID_HERE"]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set default Content-Type if not set",
+          "if (!pm.request.headers.has('Content-Type')) {",
+          "    pm.request.headers.add({ key: 'Content-Type', value: 'application/json' });",
+          "}"
+        ]
+      }
+    }
+  ]
+}
