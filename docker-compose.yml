@@ -37,12 +37,12 @@ services:
       - "5001:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5000
-      - ConnectionStrings__DefaultConnection=Host=db;Database=sparkpensdb;Username=sparkuser;Password=sparkpass123;SSL Mode=Disable
-      - Jwt__Key=SparkPensSecretKey12345678901234567890
+      - ConnectionStrings__DefaultConnection=Host=db;Database=sparkpensdb;Username=sparkuser;Password=${DB_PASSWORD};SSL Mode=Disable
+      - Jwt__Key=${JWT_KEY}
       - Jwt__Issuer=SparkPens
       - Jwt__Audience=SparkPensUsers
       - FrontendUrl=http://localhost:5173
+      - Google__ClientId=${GOOGLE_CLIENT_ID}
     depends_on:
       db:
         condition: service_healthy
@@ -59,7 +59,7 @@ services:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:5000
-      - VITE_GOOGLE_CLIENT_ID=886176078344-jimop9ec8htg2cvuuijvgluuevggmlatT_ID.apps.googleusercontent.com
+      - VITE_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
     volumes:
       - ../2026-SPARK-PENS-frontend:/app
     command: >
